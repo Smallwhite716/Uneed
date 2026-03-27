@@ -5,26 +5,26 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
-import { Camera, MapPin, X } from "lucide-react"
+import { Camera, MapPin, X, Package, Search, ShoppingBag } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import type { PostCategory, LostFoundSubType, SecondhandSubType } from "@/lib/types"
 import { PageHeader } from "@/components/page-header"
 
-const categories: { key: PostCategory; label: string; description: string }[] = [
-  { key: "express", label: "快递代取", description: "发布快递代取任务" },
-  { key: "lostfound", label: "失物招领", description: "发布失物招领信息" },
-  { key: "secondhand", label: "二手交易", description: "发布二手物品" }
+const categories: { key: PostCategory; label: string; emoji: string; description: string }[] = [
+  { key: "express", label: "快递代取", emoji: "📦", description: "发布代取任务" },
+  { key: "lostfound", label: "失物招领", emoji: "🔍", description: "寻物/拾物" },
+  { key: "secondhand", label: "二手交易", emoji: "🛒", description: "买卖二手物品" }
 ]
 
-const lostFoundSubTypes: { key: LostFoundSubType; label: string }[] = [
-  { key: "lost", label: "我丢失了" },
-  { key: "found", label: "我捡到了" }
+const lostFoundSubTypes: { key: LostFoundSubType; label: string; icon: string }[] = [
+  { key: "lost", label: "我丢失了", icon: "😢" },
+  { key: "found", label: "我捡到了", icon: "🎉" }
 ]
 
-const secondhandSubTypes: { key: SecondhandSubType; label: string }[] = [
-  { key: "sell", label: "我要出售" },
-  { key: "buy", label: "我要求购" }
+const secondhandSubTypes: { key: SecondhandSubType; label: string; icon: string }[] = [
+  { key: "sell", label: "我要出售", icon: "💰" },
+  { key: "buy", label: "我要求购", icon: "🔎" }
 ]
 
 export default function CreatePostPage() {
@@ -72,22 +72,22 @@ export default function CreatePostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-8">
+    <div className="min-h-screen bg-gradient-to-b from-secondary/20 to-background pb-8">
       <PageHeader title="发布" />
 
       <main className="max-w-md mx-auto px-4 py-4">
         {/* Category Selection */}
         <div className="mb-6">
-          <h2 className="font-semibold mb-3">选择类型</h2>
+          <h2 className="font-semibold mb-3 text-sm text-muted-foreground">选择发布类型</h2>
           <div className="grid grid-cols-3 gap-3">
             {categories.map((cat) => (
               <Card
                 key={cat.key}
                 className={cn(
-                  "cursor-pointer transition-all",
+                  "cursor-pointer transition-all duration-200 overflow-hidden",
                   selectedCategory === cat.key
-                    ? "border-primary ring-2 ring-primary/20"
-                    : "hover:border-muted-foreground/30"
+                    ? "border-primary ring-2 ring-primary/20 bg-primary/5"
+                    : "hover:border-muted-foreground/30 hover:shadow-md"
                 )}
                 onClick={() => {
                   setSelectedCategory(cat.key)
@@ -96,6 +96,14 @@ export default function CreatePostPage() {
                 }}
               >
                 <CardContent className="p-4 text-center">
+                  <div className={cn(
+                    "w-12 h-12 rounded-2xl mx-auto mb-2 flex items-center justify-center text-2xl",
+                    selectedCategory === cat.key
+                      ? "bg-gradient-to-br from-primary/20 to-primary/10"
+                      : "bg-secondary"
+                  )}>
+                    {cat.emoji}
+                  </div>
                   <span className="text-sm font-medium">{cat.label}</span>
                 </CardContent>
               </Card>
@@ -105,21 +113,24 @@ export default function CreatePostPage() {
 
         {/* SubType Selection for Lost & Found */}
         {selectedCategory === "lostfound" && (
-          <div className="mb-6">
-            <h2 className="font-semibold mb-3">选择标签 <span className="text-destructive">*</span></h2>
+          <div className="mb-6 animate-in slide-in-from-top-2 duration-200">
+            <h2 className="font-semibold mb-3 text-sm text-muted-foreground">
+              选择标签 <span className="text-destructive">*</span>
+            </h2>
             <div className="grid grid-cols-2 gap-3">
               {lostFoundSubTypes.map((type) => (
                 <Card
                   key={type.key}
                   className={cn(
-                    "cursor-pointer transition-all",
+                    "cursor-pointer transition-all duration-200 overflow-hidden",
                     lostFoundType === type.key
                       ? "border-accent ring-2 ring-accent/20 bg-accent/5"
-                      : "hover:border-muted-foreground/30"
+                      : "hover:border-muted-foreground/30 hover:shadow-md"
                   )}
                   onClick={() => setLostFoundType(type.key)}
                 >
                   <CardContent className="p-4 text-center">
+                    <span className="text-2xl mb-2 block">{type.icon}</span>
                     <span className="font-medium">{type.label}</span>
                   </CardContent>
                 </Card>
@@ -130,21 +141,24 @@ export default function CreatePostPage() {
 
         {/* SubType Selection for Secondhand */}
         {selectedCategory === "secondhand" && (
-          <div className="mb-6">
-            <h2 className="font-semibold mb-3">选择标签 <span className="text-destructive">*</span></h2>
+          <div className="mb-6 animate-in slide-in-from-top-2 duration-200">
+            <h2 className="font-semibold mb-3 text-sm text-muted-foreground">
+              选择标签 <span className="text-destructive">*</span>
+            </h2>
             <div className="grid grid-cols-2 gap-3">
               {secondhandSubTypes.map((type) => (
                 <Card
                   key={type.key}
                   className={cn(
-                    "cursor-pointer transition-all",
+                    "cursor-pointer transition-all duration-200 overflow-hidden",
                     secondhandType === type.key
                       ? "border-chart-3 ring-2 ring-chart-3/20 bg-chart-3/5"
-                      : "hover:border-muted-foreground/30"
+                      : "hover:border-muted-foreground/30 hover:shadow-md"
                   )}
                   onClick={() => setSecondhandType(type.key)}
                 >
                   <CardContent className="p-4 text-center">
+                    <span className="text-2xl mb-2 block">{type.icon}</span>
                     <span className="font-medium">{type.label}</span>
                   </CardContent>
                 </Card>
@@ -157,14 +171,15 @@ export default function CreatePostPage() {
           <>
             {/* Title */}
             <div className="mb-4">
-              <label className="block font-semibold mb-2">
+              <label className="block font-semibold mb-2 text-sm">
                 标题 <span className="text-destructive">*</span>
               </label>
               <Input
-                placeholder="请输入标题"
+                placeholder="请输入标题（10-50字）"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 maxLength={50}
+                className="rounded-xl bg-card border-0 h-11"
               />
               <p className="text-xs text-muted-foreground mt-1 text-right">
                 {title.length}/50
@@ -173,15 +188,16 @@ export default function CreatePostPage() {
 
             {/* Description */}
             <div className="mb-4">
-              <label className="block font-semibold mb-2">
+              <label className="block font-semibold mb-2 text-sm">
                 详细描述 <span className="text-destructive">*</span>
               </label>
               <Textarea
-                placeholder="请详细描述..."
+                placeholder="请详细描述物品或需求信息..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
                 maxLength={500}
+                className="rounded-xl bg-card border-0 resize-none"
               />
               <p className="text-xs text-muted-foreground mt-1 text-right">
                 {description.length}/500
@@ -190,7 +206,7 @@ export default function CreatePostPage() {
 
             {/* Location */}
             <div className="mb-4">
-              <label className="block font-semibold mb-2">
+              <label className="block font-semibold mb-2 text-sm">
                 位置 <span className="text-destructive">*</span>
               </label>
               <div className="relative">
@@ -199,51 +215,52 @@ export default function CreatePostPage() {
                   placeholder="请输入位置信息"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="pl-9"
+                  className="pl-9 rounded-xl bg-card border-0 h-11"
                 />
               </div>
             </div>
 
             {/* Price / Reward */}
             <div className="mb-4">
-              <label className="block font-semibold mb-2">
+              <label className="block font-semibold mb-2 text-sm">
                 {getPriceLabel()}
                 {selectedCategory === "secondhand" && <span className="text-destructive"> *</span>}
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">¥</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">¥</span>
                 <Input
                   type="number"
                   placeholder={getPricePlaceholder()}
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
-                  className="pl-8"
+                  className="pl-8 rounded-xl bg-card border-0 h-11"
                 />
               </div>
             </div>
 
             {selectedCategory === "express" && (
               <div className="mb-4">
-                <label className="block font-semibold mb-2">
+                <label className="block font-semibold mb-2 text-sm">
                   时间要求 <span className="text-destructive">*</span>
                 </label>
                 <Input
                   placeholder="例如：今晚 19:00 前"
                   value={timeRequirement}
                   onChange={(e) => setTimeRequirement(e.target.value)}
+                  className="rounded-xl bg-card border-0 h-11"
                 />
               </div>
             )}
 
             {/* Image Upload */}
             <div className="mb-6">
-              <label className="block font-semibold mb-2">上传图片</label>
+              <label className="block font-semibold mb-2 text-sm">上传图片（选填，最多9张）</label>
               <div className="flex gap-3 flex-wrap">
                 {images.map((img, i) => (
                   <div key={i} className="relative w-20 h-20">
-                    <div className="w-full h-full bg-secondary rounded-lg" />
+                    <div className="w-full h-full bg-gradient-to-br from-secondary to-secondary/50 rounded-xl" />
                     <button
-                      className="absolute -top-2 -right-2 w-5 h-5 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center"
+                      className="absolute -top-2 -right-2 w-5 h-5 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center hover:bg-destructive/90 transition-colors"
                       onClick={() => setImages(images.filter((_, idx) => idx !== i))}
                     >
                       <X className="w-3 h-3" />
@@ -252,7 +269,7 @@ export default function CreatePostPage() {
                 ))}
                 {images.length < 9 && (
                   <button
-                    className="w-20 h-20 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center gap-1 text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+                    className="w-20 h-20 border-2 border-dashed border-border rounded-xl flex flex-col items-center justify-center gap-1 text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors"
                     onClick={() => setImages([...images, "placeholder"])}
                   >
                     <Camera className="w-5 h-5" />
@@ -264,7 +281,7 @@ export default function CreatePostPage() {
 
             {/* Submit Button */}
             <Button
-              className="w-full h-12"
+              className="w-full h-12 rounded-xl bg-gradient-to-r from-primary to-primary/90 hover:from-primary hover:to-primary shadow-lg shadow-primary/20 text-base font-medium"
               disabled={!isFormValid()}
               onClick={handleSubmit}
             >

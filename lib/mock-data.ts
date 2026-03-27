@@ -21,9 +21,9 @@ export const mockUser: User = {
   phone: "138****8888",
   university: "北京大学",
   creditLevel: "good",
-  publishedCount: 12,
-  completedCount: 56,
-  receivedRatings: 48
+  publishedCount: 2,
+  completedCount: 0,
+  receivedRatings: 2
 }
 
 export const mockPosts: Post[] = [

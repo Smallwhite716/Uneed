@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { ClientLayout } from '@/components/client-layout'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -38,7 +39,10 @@ export default function RootLayout({
     <html lang="zh-CN">
       <body className="font-sans antialiased">
         <div className="desktop-phone-preview">
-          <div className="phone-shell">{children}</div>
+          <div className="phone-shell">
+            <div className="phone-content">{children}</div>
+            <ClientLayout />
+          </div>
         </div>
         <Analytics />
       </body>

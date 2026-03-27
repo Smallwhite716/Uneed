@@ -5,16 +5,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { 
-  Settings, 
-  LogOut,
+import {
+  Settings,
   MapPin,
   Clock
 } from "lucide-react"
 import { mockUser, mockPosts, creditLevelLabels, mockRatings } from "@/lib/mock-data"
 import type { PostCategory } from "@/lib/types"
-import { BottomNav } from "@/components/bottom-nav"
-import { FloatingButton } from "@/components/floating-button"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { getProfile } from "@/lib/demo-storage"
@@ -43,15 +40,15 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<"published" | "completed" | "ratings">("published")
   const [publishedCategory, setPublishedCategory] = useState<PostCategory>("express")
   const profile = getProfile()
-  
+
   // 我发布的帖子
   const myPosts = mockPosts.filter(p => p.publisher.id === mockUser.id)
-  // 我完成的单子（我接的单）
-  const completedPosts = mockPosts.filter(p => p.acceptedBy?.id === mockUser.id && p.status === "completed")
+  // 我接的单（我完成的）
+  const acceptedPosts = mockPosts.filter(p => p.acceptedBy?.id === mockUser.id)
   const publishedPosts = myPosts.filter(p => p.category === publishedCategory)
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen pb-20">
       {/* 顶部背景区域 */}
       <div className="bg-gradient-to-br from-primary/90 to-primary text-primary-foreground">
         <div className="max-w-md mx-auto px-4 pt-safe">
@@ -63,7 +60,7 @@ export default function ProfilePage() {
               </Button>
             </Link>
           </div>
-          
+
           {/* 用户信息卡片 */}
           <div className="flex items-center gap-4 pb-6">
             <Avatar className="w-20 h-20 border-2 border-primary-foreground/30">
@@ -109,14 +106,14 @@ export default function ProfilePage() {
       <main className="max-w-md mx-auto px-4 -mt-2">
         {/* 大 Tab：我发布的 / 我完成的 / 我的评价 */}
         <div className="mb-4">
-          <div className="flex rounded-full bg-secondary p-1">
+          <div className="flex rounded-2xl bg-card border border-border p-1.5 shadow-sm">
             <button
               onClick={() => setActiveTab("published")}
               className={cn(
-                "flex-1 rounded-full py-2 text-sm font-medium transition-colors",
+                "flex-1 rounded-xl py-2.5 text-sm font-semibold transition-all",
                 activeTab === "published"
-                  ? "bg-background text-primary shadow-sm"
-                  : "text-muted-foreground"
+                  ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-md"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
               )}
             >
               我发布的
@@ -124,10 +121,10 @@ export default function ProfilePage() {
             <button
               onClick={() => setActiveTab("completed")}
               className={cn(
-                "flex-1 rounded-full py-2 text-sm font-medium transition-colors",
+                "flex-1 rounded-xl py-2.5 text-sm font-semibold transition-all",
                 activeTab === "completed"
-                  ? "bg-background text-primary shadow-sm"
-                  : "text-muted-foreground"
+                  ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-md"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
               )}
             >
               我完成的
@@ -135,10 +132,10 @@ export default function ProfilePage() {
             <button
               onClick={() => setActiveTab("ratings")}
               className={cn(
-                "flex-1 rounded-full py-2 text-sm font-medium transition-colors",
+                "flex-1 rounded-xl py-2.5 text-sm font-semibold transition-all",
                 activeTab === "ratings"
-                  ? "bg-background text-primary shadow-sm"
-                  : "text-muted-foreground"
+                  ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-md"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
               )}
             >
               我的评价
@@ -146,24 +143,33 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* 我发布的：三个小导航 */}
+        {/* 我发布的：三个小导航 - 分类过滤 */}
         {activeTab === "published" && (
           <div className="mb-4">
-            <div className="flex rounded-full bg-secondary p-1">
-              {(["express", "lostfound", "secondhand"] as PostCategory[]).map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setPublishedCategory(cat)}
-                  className={cn(
-                    "flex-1 rounded-full py-2 text-sm font-medium transition-colors",
-                    publishedCategory === cat
-                      ? "bg-background text-primary shadow-sm"
-                      : "text-muted-foreground"
-                  )}
-                >
-                  {categoryLabels[cat]}
-                </button>
-              ))}
+            <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4">
+              {(["express", "lostfound", "secondhand"] as PostCategory[]).map((cat) => {
+                const icons: Record<PostCategory, string> = {
+                  express: "📦",
+                  lostfound: "🔍",
+                  secondhand: "🛒"
+                }
+                const isActive = publishedCategory === cat
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setPublishedCategory(cat)}
+                    className={cn(
+                      "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all flex-shrink-0",
+                      isActive
+                        ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-md shadow-primary/20"
+                        : "bg-secondary/70 text-muted-foreground hover:bg-secondary"
+                    )}
+                  >
+                    <span className="text-base">{icons[cat]}</span>
+                    <span>{categoryLabels[cat]}</span>
+                  </button>
+                )
+              })}
             </div>
           </div>
         )}
@@ -215,8 +221,8 @@ export default function ProfilePage() {
               </div>
             )
           ) : activeTab === "completed" ? (
-            completedPosts.length > 0 ? (
-              completedPosts.map((post) => (
+            acceptedPosts.length > 0 ? (
+              acceptedPosts.map((post) => (
                 <Link key={post.id} href={`/post/${post.id}`}>
                   <Card className="overflow-hidden hover:shadow-md transition-shadow">
                     <CardContent className="p-4">
@@ -250,7 +256,7 @@ export default function ProfilePage() {
               ))
             ) : (
               <div className="text-center py-12">
-                <p className="text-muted-foreground mb-4">暂无完成的单子</p>
+                <p className="text-muted-foreground mb-4">暂无接过的单子</p>
                 <Link href="/home">
                   <Button>去首页看看</Button>
                 </Link>
@@ -283,20 +289,7 @@ export default function ProfilePage() {
             )
           )}
         </div>
-
-        {/* 退出登录 */}
-        <div className="mt-6">
-          <Link href="/">
-            <Button variant="outline" className="w-full gap-2 text-destructive hover:text-destructive hover:bg-destructive/5">
-              <LogOut className="w-4 h-4" />
-              退出登录
-            </Button>
-          </Link>
-        </div>
       </main>
-
-      <FloatingButton />
-      <BottomNav />
     </div>
   )
 }

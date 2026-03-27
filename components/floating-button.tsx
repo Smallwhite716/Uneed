@@ -7,9 +7,10 @@ export function FloatingButton() {
   return (
     <Link
       href="/create"
-      className="fixed bottom-24 right-4 z-50 flex items-center justify-center w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 active:scale-95 transition-all"
+      className="absolute right-4 flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/90 text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-xl hover:scale-105 active:scale-95 transition-all z-50"
+      style={{ bottom: '72px' }}
     >
-      <Plus className="w-7 h-7" />
+      <Plus className="w-6 h-6" />
     </Link>
   )
 }

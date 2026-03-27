@@ -50,32 +50,32 @@ export default function ChatDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-secondary/20 to-background flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-card border-b border-border px-4 pt-safe">
+      <header className="sticky top-0 z-40 bg-card/80 backdrop-blur-xl border-b border-border/50 px-4 pt-safe">
         <div className="max-w-md mx-auto flex items-center justify-between h-14">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => router.back()}>
+            <Button variant="ghost" size="icon" className="hover:bg-secondary/80" onClick={() => router.back()}>
               <ChevronLeft className="w-5 h-5" />
             </Button>
             <div className="flex items-center gap-2">
-              <Avatar className="w-8 h-8">
+              <Avatar className="w-9 h-9 ring-2 ring-primary/10">
                 <AvatarImage src={otherUser.avatar} alt={otherUser.name} />
-                <AvatarFallback className="bg-primary text-primary-foreground text-sm">
+                <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground text-sm font-bold">
                   {otherUser.name.slice(0, 1)}
                 </AvatarFallback>
               </Avatar>
               <div>
-                <p className="font-medium text-sm">{otherUser.name}</p>
-                <p className="text-xs text-muted-foreground">在线</p>
+                <p className="font-semibold text-sm">{otherUser.name}</p>
+                <p className="text-xs text-green-500 font-medium">在线</p>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="hover:bg-secondary/80">
               <Phone className="w-5 h-5" />
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="hover:bg-secondary/80">
               <MoreVertical className="w-5 h-5" />
             </Button>
           </div>
@@ -96,20 +96,20 @@ export default function ChatDetailPage() {
               {!message.isMe && (
                 <Avatar className="w-8 h-8 flex-shrink-0">
                   <AvatarImage src={otherUser.avatar} alt={otherUser.name} />
-                  <AvatarFallback className="bg-secondary text-secondary-foreground text-sm">
+                  <AvatarFallback className="bg-gradient-to-br from-secondary to-secondary/80 text-secondary-foreground text-sm font-bold">
                     {otherUser.name.slice(0, 1)}
                   </AvatarFallback>
                 </Avatar>
               )}
               <div
                 className={cn(
-                  "max-w-[70%] px-4 py-2 rounded-2xl",
+                  "max-w-[75%] px-4 py-3 rounded-2xl shadow-sm",
                   message.isMe
-                    ? "bg-primary text-primary-foreground rounded-br-sm"
-                    : "bg-secondary text-secondary-foreground rounded-bl-sm"
+                    ? "bg-gradient-to-br from-primary to-primary/90 text-primary-foreground rounded-br-md"
+                    : "bg-card rounded-bl-md"
                 )}
               >
-                <p className="text-sm">{message.content}</p>
+                <p className="text-sm leading-relaxed">{message.content}</p>
                 <p
                   className={cn(
                     "text-xs mt-1",
@@ -126,17 +126,18 @@ export default function ChatDetailPage() {
       </main>
 
       {/* Input Area */}
-      <div className="sticky bottom-0 bg-card border-t border-border px-4 py-3 pb-safe">
+      <div className="sticky bottom-0 bg-card/80 backdrop-blur-xl border-t border-border/50 px-4 py-3 pb-safe">
         <div className="max-w-md mx-auto flex gap-3">
           <Input
             placeholder="输入消息..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
-            className="flex-1"
+            className="flex-1 rounded-xl bg-secondary/50 border-0 h-11"
           />
           <Button
             size="icon"
+            className="rounded-xl bg-gradient-to-br from-primary to-primary/90 hover:from-primary hover:to-primary shadow-lg shadow-primary/20"
             onClick={handleSend}
             disabled={!inputValue.trim()}
           >
