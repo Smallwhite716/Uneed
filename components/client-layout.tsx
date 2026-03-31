@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation"
 import { FloatingButton } from "@/components/floating-button"
 import { BottomNav } from "@/components/bottom-nav"
 
-const noNavPages = ["/chat/", "/post/"]
+const noNavPages = ["/chat/", "/post/", "/login", "/splash"]
 
 export function ClientLayout() {
   const pathname = usePathname()
