@@ -16,9 +16,12 @@ export function ClientLayout() {
     return null
   }
 
+  // Only show floating button on home page
+  const showFab = pathname === "/home"
+
   return (
     <>
-      <FloatingButton />
+      {showFab && <FloatingButton />}
       <BottomNav />
     </>
   )
